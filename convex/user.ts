@@ -16,7 +16,7 @@ export const create = internalMutation({
 export const get = internalQuery({
   args: { clerkId: v.string() },
   handler: async (ctx, args) => {
-    return ctx.db
+    return await ctx.db
       .query("users")
       .withIndex("by_clerkId", (query) => query.eq("clerkId", args.clerkId))
       .unique();

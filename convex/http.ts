@@ -35,6 +35,14 @@ const handleClerkWebhook = httpAction(async (ctx, req) => {
       });
       if (user) {
         console.log(`Updating user ${event.data.id} with: ${event.data}`);
+      } else {
+        console.log("User was not updated");
+        await ctx.runMutation(internal.user.create, {
+          username: `${event.data.first_name} ${event.data.last_name}`,
+          imageUrl: event.data.image_url,
+          clerkId: event.data.id,
+          email: event.data.email_addresses[0].email_address,
+        });
       }
       break;
     }
