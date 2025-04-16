@@ -1,6 +1,12 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+}
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -119,4 +125,44 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+@keyframes growSize {
+  0% {
+    transform: rotate(var(--tw-rotate, 0deg));
+    max-height: 0;
+  }
+  25% {
+    max-height: 9999px;
+  }
+  50% {
+    transform: rotate(calc(var(--tw-rotate, 0deg) + 5deg));
+  }
+  75% {
+    transform: rotate(calc(var(--tw-rotate, 0deg) - 5deg));
+  }
+  100% {
+    transform: rotate(var(--tw-rotate, 0deg));
+  }
+}
+
+.leaf-animation {
+  animation-name: growSize;
+  animation-delay: 2.5s;
+  animation-duration: 2s;
+  animation-timing-function: ease-in-out;
+  animation-fill-mode: both;
+}
+
+@keyframes coin_rotate {
+  from {
+    transform: rotateY(0deg);
+  }
+  to {
+    transform: rotateY(360deg);
+  }
+}
+
+.coin-animation {
+  animation: coin_rotate 2s linear infinite;
 }
