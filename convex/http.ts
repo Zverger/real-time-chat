@@ -5,7 +5,7 @@ import { WebhookEvent } from "@clerk/nextjs/webhooks";
 import { internal } from "./_generated/api";
 
 const validatePayLoad = async (
-  req: Request
+  req: Request,
 ): Promise<WebhookEvent | undefined> => {
   const payload = await req.text();
   const svixHeaders = {

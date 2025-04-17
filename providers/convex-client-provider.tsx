@@ -28,15 +28,13 @@ export const ConvexClientProvider: FC<ConvexClientProviderProps> = ({
   return (
     <ClerkProvider>
       <ConvexProviderWithClerk useAuth={useAuth} client={convex}>
-        <header className="flex justify-end items-center p-4 gap-4 h-16">
-          <SignedOut>
+        <SignedOut>
+          <header className="flex h-16 items-center justify-end gap-4 p-4">
             <SignInButton />
             <SignUpButton />
-          </SignedOut>
-          <SignedIn>
-            <UserButton />
-          </SignedIn>
-        </header>
+          </header>
+        </SignedOut>
+
         <Authenticated>{children}</Authenticated>
         <AuthLoading>
           <LoadingLogo />
