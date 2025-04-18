@@ -6,12 +6,12 @@ import { UserButton } from "@clerk/nextjs";
 import { Tooltip, TooltipTrigger } from "@/components/ui";
 import Link from "next/link";
 
-export function DesktopNav() {
+export function MobileNav() {
   const paths = useNavigation();
   return (
-    <Card className="hidden lg:flex lg:h-full lg:w-16 lg:flex-col lg:items-center lg:justify-between lg:px-2 lg:py-4">
-      <nav>
-        <ul className="flex flex-col items-center gap-4">
+    <Card className="fixed bottom-4 flex h-16 w-[calc(100vw-32px)] items-center p-2 lg:hidden">
+      <nav className="w-full">
+        <ul className="flex items-center justify-evenly">
           {paths.map((path, id) => (
             <li className="relative" key={id}>
               <Link href={path.href}>
@@ -33,11 +33,11 @@ export function DesktopNav() {
               </Link>
             </li>
           ))}
+          <li>
+            <UserButton />
+          </li>
         </ul>
       </nav>
-      <div className="flex flex-col items-center gap-4">
-        <UserButton />
-      </div>
     </Card>
   );
 }
