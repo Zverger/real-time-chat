@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Card, TooltipContent } from "@/components/ui";
+import { Button, Card, ThemeToggle, TooltipContent } from "@/components/ui";
 import { useNavigation } from "@/hooks/useNavigation";
 import { UserButton } from "@clerk/nextjs";
 import { Tooltip, TooltipTrigger } from "@/components/ui";
@@ -36,6 +36,7 @@ export function DesktopNav() {
         </ul>
       </nav>
       <div className="flex flex-col items-center gap-4">
+        <ThemeToggle />
         <UserButton />
       </div>
     </Card>

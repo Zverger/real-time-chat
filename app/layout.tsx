@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ConvexClientProvider } from "@/providers";
-import { TooltipProvider } from "@/components/ui";
+import { ThemeProvider, TooltipProvider } from "@/components/ui";
 import { DesktopNav, SidebarWrapper } from "@/components/shared";
 
 const geistSans = Geist({
@@ -30,9 +30,16 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ConvexClientProvider>
-          <SidebarWrapper>{children}</SidebarWrapper>
-        </ConvexClientProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <ConvexClientProvider>
+            <SidebarWrapper>{children}</SidebarWrapper>
+          </ConvexClientProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -1,3 +1,4 @@
+import { ConversationFallback } from "@/components/shared";
 import { ReactNode } from "react";
 
 interface PageProps {
@@ -5,5 +6,5 @@ interface PageProps {
 }
 
 export default function Page({ children }: PageProps) {
-  return <div className="">{children}</div>;
+  return <ConversationFallback />;
 }

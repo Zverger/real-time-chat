@@ -1,13 +1,19 @@
 "use client";
 
-import { Button, Card, TooltipContent } from "@/components/ui";
+import { Button, Card, ThemeToggle, TooltipContent } from "@/components/ui";
 import { useNavigation } from "@/hooks/useNavigation";
 import { UserButton } from "@clerk/nextjs";
 import { Tooltip, TooltipTrigger } from "@/components/ui";
 import Link from "next/link";
+import { useConversation } from "@/hooks/useConversation";
 
 export function MobileNav() {
   const paths = useNavigation();
+
+  const { isActive } = useConversation();
+
+  if (isActive) return null;
+
   return (
     <Card className="fixed bottom-4 flex h-16 w-[calc(100vw-32px)] items-center p-2 lg:hidden">
       <nav className="w-full">
@@ -33,6 +39,9 @@ export function MobileNav() {
               </Link>
             </li>
           ))}
+          <li>
+            <ThemeToggle />
+          </li>
           <li>
             <UserButton />
           </li>
