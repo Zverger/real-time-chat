@@ -3,7 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ConvexClientProvider } from "@/providers";
 import { ThemeProvider, TooltipProvider } from "@/components/ui";
-import { DesktopNav, SidebarWrapper } from "@/components/shared";
+
+import { Toaster } from "@/components/ui/sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -37,7 +38,8 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <ConvexClientProvider>
-            <SidebarWrapper>{children}</SidebarWrapper>
+            <TooltipProvider>{children}</TooltipProvider>
+            <Toaster richColors />
           </ConvexClientProvider>
         </ThemeProvider>
       </body>

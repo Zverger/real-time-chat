@@ -4,3 +4,7 @@ export * from "./tooltip";
 export * from "./card";
 export * from "./theme";
 export * from "./dropdown-menu";
+export * from "./dialog";
+export * from "./form";
+export * from "./label";
+export * from "./input";

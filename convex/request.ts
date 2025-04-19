@@ -45,7 +45,7 @@ export const create = mutation({
       .unique();
 
     if (requestAlreadyRecieved) {
-      throw new ConvexError("This user has already sent tou a request");
+      throw new ConvexError("This user has already sent to you a request");
     }
 
     const request = await ctx.db.insert("requests", {
