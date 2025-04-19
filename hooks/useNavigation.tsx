@@ -1,10 +1,22 @@
 import { usePathname } from "next/navigation";
-import { useMemo } from "react";
+import { ReactNode, useMemo } from "react";
 import { MessageSquareIcon, UsersRound } from "lucide-react";
+import { useQuery } from "convex/react";
+import { api } from "@/convex/_generated/api";
+import { Badge } from "@/components/ui/badge";
 
 export const useNavigation = () => {
   const pathName = usePathname();
-  const paths = useMemo(
+
+  const requestsCount = useQuery(api.requests.count);
+
+  const paths: {
+    name: string;
+    href: string;
+    icon: ReactNode;
+    active: boolean;
+    count?: ReactNode;
+  }[] = useMemo(
     () => [
       {
         name: "Conversations",
@@ -17,9 +29,10 @@ export const useNavigation = () => {
         href: "/friends",
         icon: <UsersRound />,
         active: pathName.startsWith("/friends"),
+        count: requestsCount,
       },
     ],
-    [pathName],
+    [pathName, requestsCount],
   );
 
   return paths;

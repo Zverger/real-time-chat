@@ -5,6 +5,7 @@ import { useNavigation } from "@/hooks/useNavigation";
 import { UserButton } from "@clerk/nextjs";
 import { Tooltip, TooltipTrigger } from "@/components/ui";
 import Link from "next/link";
+import { Badge } from "@/components/ui/badge";
 
 export function DesktopNav() {
   const paths = useNavigation();
@@ -25,6 +26,11 @@ export function DesktopNav() {
                     >
                       {path.icon}
                     </Button>
+                    {path.count && (
+                      <Badge className="absolute bottom-7 left-6 px-2">
+                        {path.count}
+                      </Badge>
+                    )}
                   </TooltipTrigger>
                   <TooltipContent side="right">
                     <p>{path.name}</p>

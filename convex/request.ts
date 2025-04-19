@@ -12,7 +12,7 @@ export const create = mutation({
       throw new ConvexError("Unauthorized");
     }
     if (args.email === identity.email) {
-      throw new ConvexError("Can't send a request to yourself");
+      throw new ConvexError("You can't send a request to yourself!");
     }
     const currentUser = await getUserByClerkId({
       ctx,
