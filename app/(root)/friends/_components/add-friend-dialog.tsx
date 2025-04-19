@@ -72,7 +72,7 @@ export const AddFriendDialog: FC = () => {
   return (
     <Dialog>
       <Tooltip>
-        <TooltipTrigger>
+        <TooltipTrigger asChild>
           <Button asChild size="icon" variant="outline">
             <DialogTrigger>
               <UserPlus />
