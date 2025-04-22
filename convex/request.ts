@@ -1,6 +1,6 @@
 import { ConvexError, v } from "convex/values";
 import { mutation } from "./_generated/server";
-import { getUserByClerkId } from "./_utils";
+import { getUserByClerkId, getUsersFriendship } from "./_utils";
 
 export const create = mutation({
   args: {
@@ -29,6 +29,12 @@ export const create = mutation({
 
     if (!receiver) throw new ConvexError("User could not be found");
 
+    const requestSentToFriend = getUsersFriendship(
+      ctx,
+      currentUser._id,
+      receiver._id,
+    );
+
     const requestAlreadySent = await ctx.db
       .query("requests")
       .withIndex("by_reciever_sender", (q) =>
@@ -54,5 +60,33 @@ export const create = mutation({
     });
 
     return request;
+  },
+});
+
+export const deny = mutation({
+  args: {
+    id: v.id("requests"),
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) {
+      throw new ConvexError("Unauthorized");
+    }
+
+    const currentUser = await getUserByClerkId({
+      ctx,
+      clerkId: identity.subject,
+    });
+
+    if (!currentUser) {
+      throw new ConvexError("User not found");
+    }
+
+    const request = await ctx.db.get(args.id);
+
+    if (!request || request.receiver !== currentUser._id)
+      throw new ConvexError("There is an error denying this request");
+
+    await ctx.db.delete(request._id);
   },
 });

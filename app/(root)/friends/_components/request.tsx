@@ -1,3 +1,5 @@
+"use client";
+
 import { FC } from "react";
 import {
   Avatar,
@@ -7,6 +9,10 @@ import {
   Card,
 } from "@/components/ui";
 import { Check, User, X } from "lucide-react";
+import { useMutationState } from "@/hooks/useMutationState";
+import { api } from "@/convex/_generated/api";
+import { toast } from "sonner";
+import { ConvexError } from "convex/values";
 
 interface RequestProps {
   className?: string;
@@ -23,6 +29,7 @@ export const Request: FC<RequestProps> = ({
   imageUrl,
   username,
 }) => {
+  const [denyRequest, denyPending] = useMutationState(api.request.deny);
   return (
     <Card className="flex w-full flex-row items-center justify-between gap-2 p-2">
       <div className="flex items-center gap-4 truncate">
@@ -38,10 +45,25 @@ export const Request: FC<RequestProps> = ({
         </div>
       </div>
       <div className="flex items-center gap-2">
-        <Button size="icon" onClick={() => {}}>
+        <Button disabled={denyPending} size="icon" onClick={() => {}}>
           <Check />
         </Button>
-        <Button size="icon" variant="destructive" onClick={() => {}}>
+        <Button
+          disabled={denyPending}
+          size="icon"
+          variant="destructive"
+          onClick={() => {
+            denyRequest({ id })
+              .then(() => toast.success("Friend request denied"))
+              .catch((error) =>
+                toast.error(
+                  error instanceof ConvexError
+                    ? error.data
+                    : "Unexpected error occurred",
+                ),
+              );
+          }}
+        >
           <X />
         </Button>
       </div>

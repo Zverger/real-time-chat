@@ -49,9 +49,7 @@ export const AddFriendDialog: FC = () => {
     },
   });
 
-  const { mutate: createRequest, pending } = useMutationState(
-    api.request.create,
-  );
+  const [createRequest, pending] = useMutationState(api.request.create);
 
   const handleSubmit = async (values: z.infer<typeof addFriendFormSchema>) => {
     await createRequest({ email: values.email })
@@ -72,17 +70,18 @@ export const AddFriendDialog: FC = () => {
   return (
     <Dialog>
       <Tooltip>
-        <TooltipTrigger asChild>
-          <Button asChild size="icon" variant="outline">
-            <DialogTrigger>
+        <DialogTrigger asChild>
+          <TooltipTrigger asChild>
+            <Button size="icon" variant="outline">
               <UserPlus />
-            </DialogTrigger>
-          </Button>
-        </TooltipTrigger>
+            </Button>
+          </TooltipTrigger>
+        </DialogTrigger>
         <TooltipContent>
           <p>Add Friend</p>
         </TooltipContent>
       </Tooltip>
+
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Add Friend</DialogTitle>
@@ -109,7 +108,7 @@ export const AddFriendDialog: FC = () => {
               )}
             />
             <DialogFooter>
-              <Button disabled={false} type="submit">
+              <Button disabled={pending} type="submit">
                 Send
               </Button>
             </DialogFooter>

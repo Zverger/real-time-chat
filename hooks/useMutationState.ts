@@ -17,5 +17,5 @@ export const useMutationState = (mutationToRun: any) => {
       .finally(() => setPending(false));
   };
 
-  return { mutate, pending };
+  return [mutate, pending] as const;
 };

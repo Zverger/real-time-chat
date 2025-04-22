@@ -9,7 +9,7 @@ import { Request } from "./_components/request";
 
 export default function Page() {
   const requests = useQuery(api.requests.get);
-  console.log(requests?.length);
+
   return (
     <>
       <ItemList title="Friends" action={<AddFriendDialog />}>

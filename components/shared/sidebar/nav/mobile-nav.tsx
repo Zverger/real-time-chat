@@ -32,7 +32,7 @@ export function MobileNav() {
                     >
                       {path.icon}
                     </Button>
-                    {path.count && (
+                    {!!path.count && (
                       <Badge className="absolute bottom-7 left-6 px-2">
                         {path.count}
                       </Badge>
