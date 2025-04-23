@@ -20,17 +20,18 @@ export default defineSchema({
     .index("by_reciever_sender", ["receiver", "sender"]),
 
   friendships: defineTable({
-    userId: v.id("users"), // The user who has a friend
-    friendId: v.id("users"), // The friend (also a user)
+    user1Id: v.id("users"), // The user who has a friend
+    user2Id: v.id("users"), // The friend (also a user)
     // Optional additional fields about the friendship
     createdAt: v.number(),
     conversationId: v.id("conversations"),
     // status: v.string(),    // e.g., "pending", "accepted"
   })
-    .index("by_userId", ["userId"])
-    .index("by_friendId", ["friendId"])
-    .index("by_conversationId", ["conversationId"])
-    .index("by_userId_friendId", ["userId", "friendId"]),
+    .index("by_user1Id", ["user1Id"])
+    .index("by_user2Id", ["user2Id"])
+    .index("by_userId_friendId", ["user1Id", "user2Id"])
+
+    .index("by_conversationId", ["conversationId"]),
 
   conversations: defineTable({
     name: v.optional(v.string()),
@@ -44,7 +45,7 @@ export default defineSchema({
   })
     .index("by_memberId", ["memberId"])
     .index("by_conversationId", ["conversationId"])
-    .index("by_memberId_conversationId", ["memberId", "conversationId"]),
+    .index("by_conversationId_memberId", ["conversationId", "memberId"]),
 
   messages: defineTable({
     senderId: v.id("users"),

@@ -1,23 +1,17 @@
 import { ConvexError, v } from "convex/values";
 import { mutation } from "./_generated/server";
-import { getUserByClerkId, getUsersFriendship } from "./_utils";
+import { getCurrentUser, getUsersFriendship } from "./_utils";
 
 export const create = mutation({
   args: {
     email: v.string(),
   },
   handler: async (ctx, args) => {
-    const identity = await ctx.auth.getUserIdentity();
-    if (!identity) {
-      throw new ConvexError("Unauthorized");
-    }
-    if (args.email === identity.email) {
+    const currentUser = await getCurrentUser(ctx);
+
+    if (args.email === currentUser.email) {
       throw new ConvexError("You can't send a request to yourself!");
     }
-    const currentUser = await getUserByClerkId({
-      ctx,
-      clerkId: identity.subject,
-    });
 
     if (!currentUser) {
       throw new ConvexError("User not found");
@@ -27,13 +21,19 @@ export const create = mutation({
       .withIndex("by_email", (q) => q.eq("email", args.email))
       .unique();
 
-    if (!receiver) throw new ConvexError("User could not be found");
+    if (!receiver) {
+      throw new ConvexError("User could not be found");
+    }
 
-    const requestSentToFriend = getUsersFriendship(
+    const requestSentToFriend = await getUsersFriendship(
       ctx,
       currentUser._id,
       receiver._id,
     );
+
+    if (requestSentToFriend) {
+      throw new ConvexError("Yout can`t send request to your current friend!");
+    }
 
     const requestAlreadySent = await ctx.db
       .query("requests")
@@ -68,19 +68,7 @@ export const deny = mutation({
     id: v.id("requests"),
   },
   handler: async (ctx, args) => {
-    const identity = await ctx.auth.getUserIdentity();
-    if (!identity) {
-      throw new ConvexError("Unauthorized");
-    }
-
-    const currentUser = await getUserByClerkId({
-      ctx,
-      clerkId: identity.subject,
-    });
-
-    if (!currentUser) {
-      throw new ConvexError("User not found");
-    }
+    const currentUser = await getCurrentUser(ctx);
 
     const request = await ctx.db.get(args.id);
 
@@ -88,5 +76,42 @@ export const deny = mutation({
       throw new ConvexError("There is an error denying this request");
 
     await ctx.db.delete(request._id);
+  },
+});
+
+export const accept = mutation({
+  args: {
+    id: v.id("requests"),
+  },
+  handler: async (ctx, args) => {
+    const currentUser = await getCurrentUser(ctx);
+
+    const request = await ctx.db.get(args.id);
+
+    if (!request || request.receiver !== currentUser._id) {
+      throw new ConvexError("There is an error accepting this request");
+    }
+
+    await ctx.db.delete(request._id);
+
+    const conversationId = await ctx.db.insert("conversations", {
+      isGroup: false,
+    });
+
+    await ctx.db.insert("conversationMembers", {
+      memberId: currentUser._id,
+      conversationId,
+    });
+    await ctx.db.insert("conversationMembers", {
+      memberId: request.sender,
+      conversationId,
+    });
+
+    await ctx.db.insert("friendships", {
+      user1Id: currentUser._id,
+      user2Id: request.sender,
+      createdAt: Date.now(),
+      conversationId,
+    });
   },
 });

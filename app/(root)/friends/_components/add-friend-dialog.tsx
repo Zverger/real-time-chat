@@ -63,24 +63,24 @@ export const AddFriendDialog: FC = () => {
             ? error.data
             : "Unexpected error occured",
         );
-      })
-      .finally(() => console.log(1111));
+      });
   };
 
   return (
     <Dialog>
-      <Tooltip>
-        <DialogTrigger asChild>
+      <DialogTrigger>
+        <Tooltip>
           <TooltipTrigger asChild>
-            <Button size="icon" variant="outline">
+            <Button asChild className="p-1" size="icon" variant="outline">
               <UserPlus />
             </Button>
           </TooltipTrigger>
-        </DialogTrigger>
-        <TooltipContent>
-          <p>Add Friend</p>
-        </TooltipContent>
-      </Tooltip>
+
+          <TooltipContent>
+            <p>Add Friend</p>
+          </TooltipContent>
+        </Tooltip>
+      </DialogTrigger>
 
       <DialogContent>
         <DialogHeader>

@@ -30,6 +30,32 @@ export const Request: FC<RequestProps> = ({
   username,
 }) => {
   const [denyRequest, denyPending] = useMutationState(api.request.deny);
+  const [acceptRequest, acceptPending] = useMutationState(api.request.accept);
+
+  const handleAccept = () => {
+    acceptRequest({ id })
+      .then(() => toast.success("Friend request accepted!"))
+      .catch((error) =>
+        toast.error(
+          error instanceof ConvexError
+            ? error.data
+            : "Unexpected error occurred",
+        ),
+      );
+  };
+
+  const handleDeny = () => {
+    denyRequest({ id })
+      .then(() => toast.success("Friend request denied!"))
+      .catch((error) =>
+        toast.error(
+          error instanceof ConvexError
+            ? error.data
+            : "Unexpected error occurred",
+        ),
+      );
+  };
+
   return (
     <Card className="flex w-full flex-row items-center justify-between gap-2 p-2">
       <div className="flex items-center gap-4 truncate">
@@ -45,24 +71,18 @@ export const Request: FC<RequestProps> = ({
         </div>
       </div>
       <div className="flex items-center gap-2">
-        <Button disabled={denyPending} size="icon" onClick={() => {}}>
+        <Button
+          disabled={denyPending || acceptPending}
+          size="icon"
+          onClick={handleAccept}
+        >
           <Check />
         </Button>
         <Button
-          disabled={denyPending}
+          disabled={denyPending || acceptPending}
           size="icon"
           variant="destructive"
-          onClick={() => {
-            denyRequest({ id })
-              .then(() => toast.success("Friend request denied"))
-              .catch((error) =>
-                toast.error(
-                  error instanceof ConvexError
-                    ? error.data
-                    : "Unexpected error occurred",
-                ),
-              );
-          }}
+          onClick={handleDeny}
         >
           <X />
         </Button>
