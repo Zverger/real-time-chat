@@ -44,12 +44,12 @@ export default function Page() {
             name={
               conversation.isGroup
                 ? conversation.name
-                : conversation.otherMember.username
+                : conversation.otherMember?.username
             }
             imageUrl={
               conversation.isGroup
                 ? undefined
-                : conversation.otherMember.imageUrl
+                : conversation.otherMember?.imageUrl
             }
           />
           <Body conversationId={conversationId} />

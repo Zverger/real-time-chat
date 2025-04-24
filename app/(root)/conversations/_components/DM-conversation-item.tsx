@@ -1,27 +1,28 @@
 import { FC, PropsWithChildren } from "react";
-import { cn } from "@/lib";
+
 import { Id } from "@/convex/_generated/dataModel";
-import { useQuery } from "convex/react";
-import { api } from "@/convex/_generated/api";
-import { ItemList } from "@/components/shared";
-import { Loader2, User } from "lucide-react";
+
+import { User } from "lucide-react";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage, Card } from "@/components/ui";
 
 interface Props extends PropsWithChildren {
   className?: string;
   id: Id<"conversations">;
-
+  lastMessageSender?: string;
+  lastMessageContent?: string;
   imageUrl?: string;
   username?: string;
+  isGroup?: boolean;
 }
 
 export const DMConversationItem: FC<Props> = ({
-  className,
-  children,
   id,
   imageUrl,
   username = "",
+  lastMessageContent,
+  isGroup,
+  lastMessageSender,
 }) => {
   return (
     <Link href={`/conversations/${id}`} className="w-full">
@@ -35,9 +36,23 @@ export const DMConversationItem: FC<Props> = ({
           </Avatar>
           <div className="flex flex-col truncate">
             <h4 className="truncate">{username}</h4>
-            <p className="text-muted-foreground truncate text-sm">
-              Start a conversation
-            </p>
+            {lastMessageSender && lastMessageContent ? (
+              <span className="text-muted-foreground flex truncate text-sm overflow-ellipsis">
+                {isGroup && (
+                  <p className="font-semibold">
+                    {lastMessageSender}
+                    {":"}&nbsp;
+                  </p>
+                )}
+                <p className="truncate overflow-ellipsis">
+                  {lastMessageContent}
+                </p>
+              </span>
+            ) : (
+              <p className="text-muted-foreground truncate text-sm">
+                Start a conversation
+              </p>
+            )}
           </div>
         </div>
       </Card>

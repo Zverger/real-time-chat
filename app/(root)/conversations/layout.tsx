@@ -15,19 +15,21 @@ interface LayoutProps {
 
 export default function Layout({ children }: LayoutProps) {
   const { data: conversations, status } = useQuery(api.conversations.getAll);
-  console.log(conversations?.length);
+
   return (
     <>
       <ItemList title="Conversations">
         {status === "success" ? (
           conversations.length > 0 ? (
-            conversations.map(({ conversation, otherMember }) =>
+            conversations.map(({ conversation, otherMember, lastMessage }) =>
               conversation.isGroup ? null : (
                 <DMConversationItem
                   key={conversation._id}
                   id={conversation._id}
                   username={otherMember?.username}
                   imageUrl={otherMember?.imageUrl}
+                  lastMessageContent={lastMessage?.content}
+                  lastMessageSender={lastMessage?.sender}
                 />
               ),
             )

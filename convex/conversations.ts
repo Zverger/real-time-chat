@@ -1,6 +1,8 @@
 import { ConvexError, v } from "convex/values";
 import { query } from "./_generated/server";
 import { getCurrentUser } from "./_utils";
+import { MutationCtx, QueryCtx } from "./_generated/server";
+import { Id } from "./_generated/dataModel";
 
 export const getAll = query({
   args: {},
@@ -30,8 +32,11 @@ export const getAll = query({
             q.eq("conversationId", conversation?._id),
           )
           .collect();
-
-        if (conversation.isGroup) return { conversation };
+        const lastMessage = await getLastMessageDetails({
+          ctx,
+          id: conversation.lastMessageId,
+        });
+        if (conversation.isGroup) return { conversation, lastMessage };
         else {
           const otherMembership = allConversationMemberships.filter(
             (membership) => membership.memberId !== currentUser._id,
@@ -41,6 +46,7 @@ export const getAll = query({
           return {
             conversation,
             otherMember,
+            lastMessage,
           };
         }
       }),
@@ -75,6 +81,7 @@ export const get = query({
         q.eq("conversationId", conversation._id),
       )
       .collect();
+
     if (!conversation.isGroup) {
       const otherMembership = allConversationMemberships.filter(
         (membership) => membership.memberId !== currentUser._id,
@@ -92,3 +99,37 @@ export const get = query({
     }
   },
 });
+
+const getLastMessageDetails = async ({
+  ctx,
+  id,
+}: {
+  ctx: QueryCtx | MutationCtx;
+  id?: Id<"messages">;
+}) => {
+  if (!id) return null;
+
+  const message = await ctx.db.get(id);
+  if (!message) return null;
+
+  const sender = await ctx.db.get(message.senderId);
+  if (!sender) return null;
+
+  const content = getMessageContent(
+    message.type,
+    message.content as unknown as string,
+  );
+  return {
+    content,
+    sender: sender.username,
+  };
+};
+
+const getMessageContent = (type: string, content: string) => {
+  switch (type) {
+    case "text":
+      return content;
+    default:
+      return "[Non-text]";
+  }
+};

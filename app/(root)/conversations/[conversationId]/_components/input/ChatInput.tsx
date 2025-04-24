@@ -20,7 +20,7 @@ import { ConvexError } from "convex/values";
 import TextareaAutosize from "react-textarea-autosize";
 import { SendHorizonal } from "lucide-react";
 
-interface ChatInputProps extends PropsWithChildren {
+interface ChatInputProps {
   className?: string;
 }
 
@@ -28,7 +28,7 @@ const chatMessageSchema = z.object({
   content: z.string().min(1, { message: "This field can`t be empty" }),
 });
 
-export const ChatInput: FC<ChatInputProps> = ({ className, children }) => {
+export const ChatInput: FC<ChatInputProps> = ({ className }) => {
   const textareaRef = useRef<HTMLAreaElement | null>(null);
   const { conversationId } = useConversation();
 
@@ -46,15 +46,11 @@ export const ChatInput: FC<ChatInputProps> = ({ className, children }) => {
       conversationId,
       type: "text",
       content: [values.content],
-    })
-      .then(() => {})
-      .catch((error) =>
-        toast.error(
-          error instanceof ConvexError
-            ? error.data
-            : "Unexpected error occurred",
-        ),
-      );
+    }).catch((error) =>
+      toast.error(
+        error instanceof ConvexError ? error.data : "Unexpected error occurred",
+      ),
+    );
   };
 
   const handleInputChange = (
