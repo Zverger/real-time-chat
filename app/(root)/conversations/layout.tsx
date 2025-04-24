@@ -3,7 +3,7 @@ import { ItemList } from "@/components/shared";
 
 import { ReactNode } from "react";
 
-import { useQuery } from "convex/react";
+import { useQuery } from "convex-helpers/react";
 import { api } from "@/convex/_generated/api";
 
 import { Loader2 } from "lucide-react";
@@ -14,12 +14,12 @@ interface LayoutProps {
 }
 
 export default function Layout({ children }: LayoutProps) {
-  const conversations = useQuery(api.conversations.getAll);
+  const { data: conversations, status } = useQuery(api.conversations.getAll);
   console.log(conversations?.length);
   return (
     <>
       <ItemList title="Conversations">
-        {conversations ? (
+        {status === "success" ? (
           conversations.length > 0 ? (
             conversations.map(({ conversation, otherMember }) =>
               conversation.isGroup ? null : (

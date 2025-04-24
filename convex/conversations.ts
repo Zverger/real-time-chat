@@ -80,6 +80,7 @@ export const get = query({
         (membership) => membership.memberId !== currentUser._id,
       )[0];
       const otherMemberDetails = await ctx.db.get(otherMembership.memberId);
+
       return {
         ...conversation,
         otherMember: {
