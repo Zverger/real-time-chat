@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, ReactNode } from "react";
 import { cn } from "@/lib";
 
 import { format } from "date-fns";
@@ -16,7 +16,7 @@ interface MessageProps {
   content: string[];
   createdAt: number;
   type: string;
-
+  Seen?: ReactNode;
   zIndex: number;
 }
 
@@ -30,6 +30,7 @@ export const Message: FC<MessageProps> = ({
   content,
   createdAt,
   type,
+  Seen,
   zIndex = 0,
 }) => {
   const formatTime = (timeStamp: number) => format(timeStamp, "HH:mm");
@@ -58,7 +59,7 @@ export const Message: FC<MessageProps> = ({
             })}
           >
             {type === "text" ? (
-              <p className="text-wrap break-words whitespace-pre-wrap">
+              <p className="text-wrap break-words break-all whitespace-pre-wrap">
                 {content}
               </p>
             ) : null}
@@ -71,6 +72,7 @@ export const Message: FC<MessageProps> = ({
               {formatTime(createdAt)}
             </p>
           </div>
+          {Seen}
         </div>
         <Avatar
           className={cn("relative h-8 w-8", {

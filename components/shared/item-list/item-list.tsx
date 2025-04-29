@@ -19,16 +19,19 @@ export const ItemList: FC<ItemListProps> = ({
   const { isActive } = useConversation();
   return (
     <Card
-      className={cn("hidden h-full w-full p-2 lg:w-80 lg:flex-none", {
-        block: !isActive,
-        "lg:block": isActive,
-      })}
+      className={cn(
+        "hidden w-full overflow-y-hidden p-2 lg:w-80 lg:flex-none",
+        {
+          block: !isActive,
+          "lg:block": isActive,
+        },
+      )}
     >
       <div className="mb-4 flex items-center justify-between">
         <h1 className="text-2xl font-semibold tracking-tight">{title}</h1>
         {Action}
       </div>
-      <div className="flex h-full w-full flex-col items-center justify-start gap-2">
+      <div className="no-scrollbar flex h-full w-full flex-col items-center justify-start gap-2 overflow-y-scroll pb-13">
         {children}
       </div>
     </Card>

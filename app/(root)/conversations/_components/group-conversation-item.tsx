@@ -1,0 +1,60 @@
+import { FC, PropsWithChildren } from "react";
+
+import { Id } from "@/convex/_generated/dataModel";
+
+import { User } from "lucide-react";
+import Link from "next/link";
+import { Avatar, AvatarFallback, AvatarImage, Card } from "@/components/ui";
+
+interface Props {
+  className?: string;
+  id: Id<"conversations">;
+  lastMessageSender?: string;
+  lastMessageContent?: string;
+  name: string | undefined;
+
+  isGroup?: boolean;
+}
+
+export const GroupConversationItem: FC<Props> = ({
+  id,
+  name = "",
+
+  lastMessageContent,
+  isGroup,
+  lastMessageSender,
+}) => {
+  return (
+    <Link href={`/conversations/${id}`} className="w-full">
+      <Card className="flex flex-row items-center gap-4 truncate p-2">
+        <div className="flex flex-row items-center gap-4 truncate">
+          <Avatar>
+            <AvatarFallback>
+              {name.charAt(0).toLocaleUpperCase()}
+            </AvatarFallback>
+          </Avatar>
+          <div className="flex flex-col truncate">
+            <h4 className="truncate">{name}</h4>
+            {lastMessageSender && lastMessageContent ? (
+              <span className="text-muted-foreground flex truncate text-sm overflow-ellipsis">
+                {isGroup && (
+                  <p className="font-semibold">
+                    {lastMessageSender}
+                    {":"}&nbsp;
+                  </p>
+                )}
+                <p className="truncate overflow-ellipsis">
+                  {lastMessageContent}
+                </p>
+              </span>
+            ) : (
+              <p className="text-muted-foreground truncate text-sm">
+                Start a conversation
+              </p>
+            )}
+          </div>
+        </div>
+      </Card>
+    </Link>
+  );
+};

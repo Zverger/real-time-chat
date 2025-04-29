@@ -5,7 +5,6 @@ const getConvexErrorMessage = (message: string, fallback: string = "") => {
     ?.trim();
 
   if (!errorMessage) {
-    console.log(message);
     return fallback;
   }
 

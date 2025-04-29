@@ -49,7 +49,7 @@ export const AddFriendDialog: FC = () => {
     },
   });
 
-  const [createRequest, pending] = useMutationState(api.request.create);
+  const [createRequest, { isPending }] = useMutationState(api.request.create);
 
   const handleSubmit = async (values: z.infer<typeof addFriendFormSchema>) => {
     await createRequest({ email: values.email })
@@ -108,7 +108,7 @@ export const AddFriendDialog: FC = () => {
               )}
             />
             <DialogFooter>
-              <Button disabled={pending} type="submit">
+              <Button disabled={isPending} type="submit">
                 Send
               </Button>
             </DialogFooter>

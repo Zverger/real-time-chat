@@ -8,6 +8,8 @@ import { api } from "@/convex/_generated/api";
 
 import { Loader2 } from "lucide-react";
 import { DMConversationItem } from "./_components/DM-conversation-item";
+import { CreateGroupDialog } from "./_components/create-group-dialog";
+import { GroupConversationItem } from "./_components/group-conversation-item";
 
 interface LayoutProps {
   children?: ReactNode;
@@ -18,11 +20,19 @@ export default function Layout({ children }: LayoutProps) {
 
   return (
     <>
-      <ItemList title="Conversations">
+      <ItemList title="Conversations" action={<CreateGroupDialog />}>
         {status === "success" ? (
           conversations.length > 0 ? (
             conversations.map(({ conversation, otherMember, lastMessage }) =>
-              conversation.isGroup ? null : (
+              conversation.isGroup ? (
+                <GroupConversationItem
+                  key={conversation._id}
+                  name={conversation.name}
+                  id={conversation._id}
+                  lastMessageContent={lastMessage?.content}
+                  lastMessageSender={lastMessage?.sender}
+                />
+              ) : (
                 <DMConversationItem
                   key={conversation._id}
                   id={conversation._id}
@@ -39,7 +49,7 @@ export default function Layout({ children }: LayoutProps) {
             </p>
           )
         ) : (
-          <Loader2 className="spin" />
+          <Loader2 className="animate-spin" />
         )}
       </ItemList>
       {children}

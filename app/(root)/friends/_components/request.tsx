@@ -13,17 +13,17 @@ import { useMutationState } from "@/hooks/useMutationState";
 import { api } from "@/convex/_generated/api";
 import { toast } from "sonner";
 import { ConvexError } from "convex/values";
+import { Id } from "@/convex/_generated/dataModel";
 
 interface RequestProps {
   className?: string;
-  id: string;
+  id: Id<"requests">;
   email: string;
   imageUrl: string;
   username: string;
 }
 
 export const Request: FC<RequestProps> = ({
-  className,
   id,
   email,
   imageUrl,
@@ -72,14 +72,14 @@ export const Request: FC<RequestProps> = ({
       </div>
       <div className="flex items-center gap-2">
         <Button
-          disabled={denyPending || acceptPending}
+          disabled={denyPending.isPending || acceptPending.isPending}
           size="icon"
           onClick={handleAccept}
         >
           <Check />
         </Button>
         <Button
-          disabled={denyPending || acceptPending}
+          disabled={denyPending.isPending || acceptPending.isPending}
           size="icon"
           variant="destructive"
           onClick={handleDeny}

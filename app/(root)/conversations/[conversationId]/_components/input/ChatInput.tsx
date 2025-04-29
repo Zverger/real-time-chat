@@ -95,7 +95,7 @@ export const ChatInput: FC<ChatInputProps> = ({ className }) => {
                 </FormItem>
               )}
             />
-            <Button size="icon" type="submit" disabled={pending}>
+            <Button size="icon" type="submit" disabled={pending.isPending}>
               <SendHorizonal />
             </Button>
           </form>

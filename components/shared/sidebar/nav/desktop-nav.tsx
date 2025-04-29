@@ -19,7 +19,7 @@ export function DesktopNav() {
                 <Tooltip>
                   <TooltipTrigger>
                     <Button
-                      asChild={true}
+                      asChild
                       size="icon"
                       variant={path.active ? "default" : "outline"}
                       className="p-1"

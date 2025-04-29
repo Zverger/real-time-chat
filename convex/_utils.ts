@@ -37,6 +37,38 @@ export const getUsersFriendship = async (
     .first();
 };
 
+export const getUserFriends = async (
+  ctx: QueryCtx | MutationCtx,
+  userId: Id<"users">,
+) => {
+  const friendship1 = await ctx.db
+    .query("friendships")
+    .withIndex("by_user1Id", (q) => q.eq("user1Id", userId))
+    .collect();
+  const friendship2 = await ctx.db
+    .query("friendships")
+    .withIndex("by_user2Id", (q) => q.eq("user2Id", userId))
+    .collect();
+
+  const friends = await Promise.all(
+    [...friendship1, ...friendship2].map(async (friendship) => {
+      const friendId =
+        userId === friendship.user1Id ? friendship.user2Id : friendship.user1Id;
+      const friend = await ctx.db.get(friendId);
+
+      if (!friend) throw new ConvexError("Friend user was not found");
+      return {
+        id: friend._id,
+        username: friend.username,
+        email: friend.email,
+        imageUrl: friend.imageUrl,
+        addedAt: friendship._creationTime,
+      };
+    }),
+  );
+  return friends;
+};
+
 export const getCurrentUser = async (ctx: QueryCtx | MutationCtx) => {
   const identity = await ctx.auth.getUserIdentity();
   if (!identity) throw new Error("Unothaurized");
@@ -49,4 +81,11 @@ export const getCurrentUser = async (ctx: QueryCtx | MutationCtx) => {
   if (!currentUser) throw new ConvexError("User was not found");
 
   return currentUser;
+};
+
+export const getOtherUser = (
+  users: { user1: string; user2: string },
+  currentUser: string,
+) => {
+  return users.user1 === currentUser ? users.user2 : users.user1;
 };
