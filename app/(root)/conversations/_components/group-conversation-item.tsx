@@ -5,6 +5,7 @@ import { Id } from "@/convex/_generated/dataModel";
 import { User } from "lucide-react";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage, Card } from "@/components/ui";
+import { Badge } from "@/components/ui/badge";
 
 interface Props {
   className?: string;
@@ -12,21 +13,21 @@ interface Props {
   lastMessageSender?: string;
   lastMessageContent?: string;
   name: string | undefined;
-
+  unseenCount?: number;
   isGroup?: boolean;
 }
 
 export const GroupConversationItem: FC<Props> = ({
   id,
   name = "",
-
+  unseenCount = 0,
   lastMessageContent,
   isGroup,
   lastMessageSender,
 }) => {
   return (
     <Link href={`/conversations/${id}`} className="w-full">
-      <Card className="flex flex-row items-center gap-4 truncate p-2">
+      <Card className="flex flex-row items-center justify-between p-2">
         <div className="flex flex-row items-center gap-4 truncate">
           <Avatar>
             <AvatarFallback>
@@ -54,6 +55,7 @@ export const GroupConversationItem: FC<Props> = ({
             )}
           </div>
         </div>
+        {unseenCount > 0 && <Badge>{unseenCount}</Badge>}
       </Card>
     </Link>
   );

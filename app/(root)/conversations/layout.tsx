@@ -23,25 +23,28 @@ export default function Layout({ children }: LayoutProps) {
       <ItemList title="Conversations" action={<CreateGroupDialog />}>
         {status === "success" ? (
           conversations.length > 0 ? (
-            conversations.map(({ conversation, otherMember, lastMessage }) =>
-              conversation.isGroup ? (
-                <GroupConversationItem
-                  key={conversation._id}
-                  name={conversation.name}
-                  id={conversation._id}
-                  lastMessageContent={lastMessage?.content}
-                  lastMessageSender={lastMessage?.sender}
-                />
-              ) : (
-                <DMConversationItem
-                  key={conversation._id}
-                  id={conversation._id}
-                  username={otherMember?.username}
-                  imageUrl={otherMember?.imageUrl}
-                  lastMessageContent={lastMessage?.content}
-                  lastMessageSender={lastMessage?.sender}
-                />
-              ),
+            conversations.map(
+              ({ conversation, otherMember, lastMessage, unseenCount }) =>
+                conversation.isGroup ? (
+                  <GroupConversationItem
+                    key={conversation._id}
+                    name={conversation.name}
+                    id={conversation._id}
+                    lastMessageContent={lastMessage?.content}
+                    lastMessageSender={lastMessage?.sender}
+                    unseenCount={unseenCount}
+                  />
+                ) : (
+                  <DMConversationItem
+                    key={conversation._id}
+                    id={conversation._id}
+                    username={otherMember?.username}
+                    imageUrl={otherMember?.imageUrl}
+                    lastMessageContent={lastMessage?.content}
+                    lastMessageSender={lastMessage?.sender}
+                    unseenCount={unseenCount}
+                  />
+                ),
             )
           ) : (
             <p className="flex h-full w-full items-center justify-center">
