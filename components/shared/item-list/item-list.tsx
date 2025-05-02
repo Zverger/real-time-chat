@@ -25,6 +25,7 @@ export const ItemList: FC<ItemListProps> = ({
           block: !isActive,
           "lg:block": isActive,
         },
+        className,
       )}
     >
       <div className="mb-4 flex items-center justify-between">

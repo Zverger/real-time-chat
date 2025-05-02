@@ -1,10 +1,9 @@
-import { FC, PropsWithChildren } from "react";
+import { FC } from "react";
 
 import { Id } from "@/convex/_generated/dataModel";
 
-import { User } from "lucide-react";
 import Link from "next/link";
-import { Avatar, AvatarFallback, AvatarImage, Card } from "@/components/ui";
+import { Avatar, AvatarFallback, Card } from "@/components/ui";
 import { Badge } from "@/components/ui/badge";
 
 interface Props {

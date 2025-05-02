@@ -1,5 +1,5 @@
 "use client";
-import { FC, useMemo, useRef } from "react";
+import { FC, useRef } from "react";
 import { cn } from "@/lib";
 import { z } from "zod";
 import { useQuery } from "convex-helpers/react";
@@ -58,7 +58,7 @@ export const CreateGroupDialog: FC<CreateGroupDialogProps> = ({
 }) => {
   const dialogTriggerRef = useRef<HTMLButtonElement>(null);
 
-  const { data: friends, status, error } = useQuery(api.friendships.getAll);
+  const { data: friends } = useQuery(api.friendships.getAll);
 
   const [createGroup, pending] = useMutationState(
     api.conversations.createGroup,
@@ -71,11 +71,8 @@ export const CreateGroupDialog: FC<CreateGroupDialogProps> = ({
 
   const members = form.watch("members", []);
 
-  const unselectedFriends = useMemo(
-    () =>
-      friends ? friends.filter((friend) => !members.includes(friend.id)) : [],
-    [members.length, friends?.length],
-  );
+  const unselectedFriends =
+    friends?.filter((friend) => !members.includes(friend.id)) || [];
 
   const handleSubmit = (values: z.infer<typeof createGroupFormSchema>) => {
     createGroup({
@@ -109,7 +106,7 @@ export const CreateGroupDialog: FC<CreateGroupDialogProps> = ({
         </Tooltip>
       </DialogTrigger>
 
-      <DialogContent className="block">
+      <DialogContent className={cn("block", className)}>
         <DialogHeader>
           <DialogTitle>Create group chat</DialogTitle>
           <DialogDescription>

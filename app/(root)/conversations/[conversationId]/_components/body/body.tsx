@@ -21,18 +21,14 @@ interface BodyProps extends PropsWithChildren {
   members: {
     lastSeenMessageId?: Id<"messages">;
     username?: string;
-    [key: string]: any;
+    [key: string]: unknown;
   }[];
 }
 
 export const Body: FC<BodyProps> = ({ className, conversationId, members }) => {
-  const {
-    data: messages,
-    status,
-    error,
-  } = useQuery(api.messages.getAll, { conversationId });
+  const { data: messages } = useQuery(api.messages.getAll, { conversationId });
 
-  const [markRead, pending] = useMutationState(api.conversations.markRead);
+  const [markRead] = useMutationState(api.conversations.markRead);
 
   useEffect(() => {
     if (messages && messages.length) {
@@ -41,7 +37,7 @@ export const Body: FC<BodyProps> = ({ className, conversationId, members }) => {
         messageId: messages[0].message.id,
       });
     }
-  }, [messages?.length, conversationId, markRead]);
+  }, [messages, conversationId, markRead]);
 
   const formatSeenBy = (names: string[]) => {
     switch (names.length) {

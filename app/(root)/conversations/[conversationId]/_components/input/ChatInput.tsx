@@ -1,5 +1,5 @@
 "use client";
-import { FC, PropsWithChildren, SyntheticEvent, useRef } from "react";
+import { FC, SyntheticEvent } from "react";
 import { cn } from "@/lib";
 import {
   Button,
@@ -29,7 +29,6 @@ const chatMessageSchema = z.object({
 });
 
 export const ChatInput: FC<ChatInputProps> = ({ className }) => {
-  const textareaRef = useRef<HTMLAreaElement | null>(null);
   const { conversationId } = useConversation();
 
   const [createMessage, pending] = useMutationState(api.messages.create);

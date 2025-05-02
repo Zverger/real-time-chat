@@ -286,6 +286,8 @@ export const markRead = mutation({
       throw new ConvexError("You are not member of this conversation");
     }
     const lastSeenMessage = (await ctx.db.get(args.messageId))?._id;
-    await ctx.db.patch(membership._id, { lastSeenMessage });
+    if (lastSeenMessage !== membership.lastSeenMessage) {
+      await ctx.db.patch(membership._id, { lastSeenMessage });
+    }
   },
 });

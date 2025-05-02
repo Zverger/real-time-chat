@@ -1,4 +1,4 @@
-import { FC, PropsWithChildren } from "react";
+import { FC } from "react";
 import { cn } from "@/lib";
 import {
   Avatar,
